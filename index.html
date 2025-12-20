@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sebio - Your Smart AI Companion</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      background: #f0f0f5;
+      color: #333;
+    }
+    #chat-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      height: 400px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 80%;
+      clear: both;
+    }
+    .user-message {
+      background: #0084ff;
+      color: white;
+      float: right;
+      text-align: right;
+    }
+    .ai-message {
+      background: #e4e6eb;
+      float: left;
+      text-align: left;
+    }
+    #input-container {
+      display: flex;
+    }
+    #user-input {
+      flex-grow: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+font-size: 16px;
+    }
+    #send-btn {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      background: #0084ff;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Sebio - Your Smart AI Companion 🤖</h2>
+
+<div id="chat-container"></div>
+
+<div id="input-container">
+  <input type="text" id="user-input" placeholder="Ask me anything..." />
+  <button id="send-btn">Send</button>
+</div>
+
+<script>
+  const chatContainer = document.getElementById('chat-container');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+
+  // Add message to chat box
+  function addMessage(message, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message');
+    msgDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+    msgDiv.textContent = message;
+    chatContainer.appendChild(msgDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  // Simulate AI response for now
+  function getAIResponse(message) {
+    // Placeholder for AI logic, now just echoing
+    return "You said: " + message;
+  }
+
+  function sendMessage() {
+    const message = userInput.value.trim();
+if (!message) return;
+
+    addMessage(message, 'user');
+    userInput.value = '';
+
+    // Simulate AI thinking delay
+    setTimeout(() => {
+      const aiResponse = getAIResponse(message);
+      addMessage(aiResponse, 'ai');
+    }, 800);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+
+  userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+</script>
+
+</body>
+</html>
