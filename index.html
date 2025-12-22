@@ -18,7 +18,6 @@
             --busy-orange: #ffcc00;
         }
 
-        /* Admin Gold Theme */
         body.admin-mode { 
             --primary: #FFD700; 
             --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #b8860b 100%); 
@@ -38,9 +37,7 @@
         }
 
         .wa-top-banner { background: var(--wa-green); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: bold; text-decoration: none; display: block; border-bottom: 2px solid rgba(0,0,0,0.1); z-index: 1000; flex-shrink: 0; }
-
         #admin-panel { display: none; background: rgba(0,0,0,0.5); color: #FFD700; padding: 6px; text-align: center; font-size: 11px; font-weight: bold; border-bottom: 1px solid #FFD700; flex-shrink: 0; }
-        
         header { padding: 12px 20px; background: var(--header-bg); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; color: white; flex-shrink: 0; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
         .logo-circle { width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #764ba2; }
@@ -54,17 +51,8 @@
         .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
         .ai-message { background: var(--msg-ai); color: var(--msg-text); align-self: flex-start; border-bottom-left-radius: 4px; }
 
-        .wa-chat-btn { 
-            display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 20px; 
-            background: var(--wa-green); color: white !important; text-decoration: none; 
-            border-radius: 15px; font-weight: bold; font-size: 14px;
-            animation: pulse-wa 2s infinite;
-        }
-        @keyframes pulse-wa {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
+        .wa-chat-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 20px; background: var(--wa-green); color: white !important; text-decoration: none; border-radius: 15px; font-weight: bold; font-size: 14px; animation: pulse-wa 2s infinite; }
+        @keyframes pulse-wa { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
         .wa-floating { position: fixed; bottom: 100px; right: 20px; width: 55px; height: 55px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; transition: 0.3s; }
 
@@ -82,7 +70,7 @@
     🚀 Create your own AI or Website with Seb-Creations! CLICK HERE 💬
 </a>
 
-<div id="admin-panel">👑 ADMIN: Seb | TANK: <span id="tank-id">1</span> | TOTAL: <span id="count">0</span></div>
+<div id="admin-panel">👑 ADMIN: Seb | STATUS: ONLINE | TOTAL: <span id="count">0</span></div>
 
 <header>
     <div class="logo-area"><div class="logo-circle">S</div><h1 style="font-size:1rem; margin:0;">SEBIO AI</h1></div>
@@ -114,15 +102,11 @@
 <footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
 
 <script>
-    // --- 4-TANK SPLIT KEY SYSTEM (NEW KEY IN TANK 1) ---
-    const t1_a = "AIzaSyD"; const t1_b = "qsre60gwGJ7q5Yiu7MhAvN9jQDLomwgs"; // Your New Key
-    const t2_a = "AIzaSyC"; const t2_b = "u3eWHdCpqsuik4zPuN4ojw8EonLHcdk8"; 
-    const t3_a = "AIzaSyD"; const t3_b = "dCF0Twv25Wvu-rROMcHJjAzrc8RWQHG8"; 
-    const t4_a = "AIzaSyA"; const t4_b = "As2cE4upGnWiCXLbSlbjed7vzZtsRRXY"; 
-
-    const API_TANKS = [t1_a+t1_b, t2_a+t2_b, t3_a+t3_b, t4_a+t4_b];
+    // --- SINGLE TANK SYSTEM (FRESH KEY) ---
+    const p1 = "AIzaSyD"; 
+    const p2 = "qsre60gwGJ7q5Yiu7MhAvN9jQDLomwgs";
+    const API_KEY = p1 + p2;
     
-    let activeTank = 0;
     let isAdmin = false;
     let msgCounter = 0;
 
@@ -130,7 +114,6 @@
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
     const statusLight = document.getElementById('status-light');
-    const tankDisplay = document.getElementById('tank-id');
     const countDisplay = document.getElementById('count');
 
     function getInstructions() {
@@ -148,7 +131,7 @@
             document.body.classList.add('admin-mode');
             document.getElementById('admin-panel').style.display = 'block';
             userInput.value = '';
-            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! I've loaded 4 fuel tanks for you. 🔥");
+            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! Engine is fueled and ready. 🔥");
             return;
         }
 
@@ -157,12 +140,8 @@
         document.body.classList.remove('refueling');
         statusLight.classList.remove('busy');
 
-        // Automatic tank rotation
-        activeTank = (activeTank + 1) % API_TANKS.length;
-        tankDisplay.textContent = activeTank + 1;
-
         try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_TANKS[activeTank]}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -185,9 +164,9 @@
             } else {
                 document.body.classList.add('refueling');
                 statusLight.classList.add('busy');
-                addMessage('assistant', "⚠️ Tank " + (activeTank + 1) + " is low on fuel! Trying another tank... please resend.");
+                addMessage('assistant', "⚠️ Engine is refueling. Please wait 30 seconds and try again.");
             }
-        } catch (err) { addMessage('assistant', "❌ Connection Error."); }
+        } catch (err) { addMessage('assistant', "❌ Connection Error. Tank is empty."); }
     }
 
     function addMessage(role, text) {
