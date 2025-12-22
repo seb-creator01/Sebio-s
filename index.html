@@ -3,190 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebio AI - by Seb-Creations</title>
+    <title>SEBIO AI</title>
     <style>
-        :root {
-            --primary: #007AFF;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --busy-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            --header-bg: rgba(255, 255, 255, 0.1);
-            --msg-ai: #ffffff;
-            --msg-text: #333333;
-            --input-bg: #ffffff;
-            --wa-green: #25D366;
-            --ready-green: #00ff88;
-            --busy-orange: #ffcc00;
-        }
-
-        /* Admin Gold Theme */
-        body.admin-mode { 
-            --primary: #FFD700; 
-            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #b8860b 100%); 
-        }
-        body.refueling { background: var(--busy-gradient) !important; }
-
-        body { font-family: -apple-system, sans-serif; background: var(--bg-gradient); margin: 0; height: 100vh; display: flex; flex-direction: column; transition: 0.8s ease; overflow: hidden; }
-
-        .wa-top-banner { background: var(--wa-green); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: bold; text-decoration: none; display: block; border-bottom: 2px solid rgba(0,0,0,0.1); z-index: 1000; }
-
-        #admin-panel { display: none; background: rgba(0,0,0,0.5); color: #FFD700; padding: 6px; text-align: center; font-size: 11px; font-weight: bold; border-bottom: 1px solid #FFD700; }
-        
-        header { padding: 12px 20px; background: var(--header-bg); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; color: white; }
-        .logo-area { display: flex; align-items: center; gap: 10px; }
-        .logo-circle { width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #764ba2; }
-
-        .status-indicator { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: bold; }
-        #status-light { width: 10px; height: 10px; background: var(--ready-green); border-radius: 50%; box-shadow: 0 0 8px var(--ready-green); transition: 0.3s; }
-        #status-light.busy { background: var(--busy-orange); box-shadow: 0 0 8px var(--busy-orange); }
-
-        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .message { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 16px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; }
-        .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .ai-message { background: var(--msg-ai); color: var(--msg-text); align-self: flex-start; border-bottom-left-radius: 4px; }
-
-        .wa-chat-btn { 
-            display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 20px; 
-            background: var(--wa-green); color: white !important; text-decoration: none; 
-            border-radius: 15px; font-weight: bold; font-size: 14px;
-            animation: pulse-wa 2s infinite;
-        }
-        @keyframes pulse-wa {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-
-        .wa-floating { position: fixed; bottom: 120px; right: 20px; width: 55px; height: 55px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; transition: 0.3s; }
-
-        #input-area { background: var(--input-bg); padding: 20px; display: flex; gap: 12px; border-top: 1px solid rgba(0,0,0,0.05); align-items: center; }
-        #input-container { flex: 1; display: flex; background: rgba(0,0,0,0.05); border-radius: 30px; padding: 5px 20px; border: 1px solid rgba(0,0,0,0.1); }
-        input { flex: 1; padding: 15px 0; border: none; outline: none; font-size: 16px; background: transparent; color: var(--msg-text); }
-        #send-btn { background: var(--primary); color: white; border: none; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-
-        footer { text-align: center; padding: 10px; color: rgba(255,255,255,0.6); font-size: 11px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; flex-direction: column; height: 100vh; margin: 0; }
+        #admin-bar { background: rgba(0,0,0,0.8); color: gold; padding: 5px; text-align: center; font-size: 12px; display: none; font-weight: bold; border-bottom: 2px solid gold; }
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .message { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; }
+        .user { align-self: flex-end; background-color: #007bff; color: white; border-bottom-right-radius: 2px; }
+        .ai { align-self: flex-start; background-color: white; color: #333; border-bottom-left-radius: 2px; }
+        #input-area { background: white; padding: 15px; display: flex; gap: 10px; border-top: 1px solid #ddd; }
+        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 25px; outline: none; color: #333; }
+        button { background: #764ba2; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<a href="https://wa.me/2348053103234" class="wa-top-banner">
-    🚀 Create your own AI or Website with Seb-Creations! CLICK HERE 💬
-</a>
-
-<div id="admin-panel">👑 ADMIN: Seb | TANK: <span id="tank-id">1</span> | TOTAL: <span id="count">0</span></div>
-
-<header>
-    <div class="logo-area"><div class="logo-circle">S</div><h1 style="font-size:1rem; margin:0;">SEBIO AI</h1></div>
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <div class="status-indicator"><div id="status-light"></div></div>
-        <button onclick="location.reload()" style="background:none; border:none; cursor:pointer; font-size:20px;">🔄</button>
-    </div>
-</header>
+<div id="admin-bar">👑 ADMIN: Seb | TANK: 1 | TOTAL: <span id="msg-count">0</span></div>
 
 <div id="chat-container">
-    <div class="message ai-message">
-        👋 Hello! I am <b>Sebio</b>, your personal AI by <b>Seb-Creations</b>. ✨<br><br>
-        To create or edit any website or app, chat with him on WhatsApp:<br>
-        <a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat on WhatsApp 💬</a>
-    </div>
+    <div class="message ai">👋 Hello! I am <b>Sebio</b>, your personal AI by Seb-Creations. ✨</div>
 </div>
-
-<a href="https://wa.me/2348053103234" class="wa-floating">
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-</a>
 
 <div id="input-area">
-    <div id="input-container">
-        <input type="text" id="user-input" placeholder="Message Sebio..." autocomplete="off">
-    </div>
-    <button id="send-btn">➤</button>
+    <input type="text" id="user-input" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+    <button onclick="sendMessage()">Send</button>
 </div>
 
-<footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
-
 <script>
-    let activeTank = 0;
-    let isAdmin = false;
-    let msgCounter = 0;
-
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const statusLight = document.getElementById('status-light');
-    const tankDisplay = document.getElementById('tank-id');
-    const countDisplay = document.getElementById('count');
+    let totalMessages = 0;
+    const adminPass = "seb123"; // Your secret code
 
     function getInstructions() {
-        let role = "Your name is Sebio. Created by Seb-Creations. Use lots of emojis 🚀✨🔥. NEVER mention Google.";
-        if (isAdmin) { role += " You are speaking to your creator, BOSS Seb. Acknowledge him as the boss."; }
-        return role;
+        return "You are Sebio, a helpful AI created by Seb-Creations. Be friendly and professional.";
     }
 
-    async function handleChat() {
-        const text = userInput.value.trim();
+    async function sendMessage() {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
         if (!text) return;
 
-        // --- ADMIN LOGIN ---
-        if (text === "seb123") {
-            isAdmin = true;
-            document.body.classList.add('admin-mode');
-            document.getElementById('admin-panel').style.display = 'block';
-            userInput.value = '';
-            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! My Vercel engine is ready. 🔥");
+        // Check for Admin Secret
+        if (text.toLowerCase() === adminPass) {
+            document.getElementById('admin-bar').style.display = 'block';
+            addMessage("👑 Admin Mode Active. Welcome back, Boss Seb! My Vercel engine is ready. 🔥", 'ai');
+            input.value = '';
             return;
         }
 
-        addMessage('user', text);
-        userInput.value = '';
-        document.body.classList.remove('refueling');
-        statusLight.classList.remove('busy');
-
-        // Increment counter
-        msgCounter++;
-        countDisplay.textContent = msgCounter;
+        addMessage(text, 'user');
+        input.value = '';
 
         try {
-            // TALKS TO YOUR VERCEL PROXY - NO KEY EXPOSED!
-            const response = await fetch("https://sebio-s.vercel.app/api/chat", {
+            // THE CONNECTED BRIDGE TO VERCEL
+            const response = await fetch("https://sebio-s.vercel.app/api/chat", { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    message: getInstructions() + "\nUser: " + text 
-                })
+                body: JSON.stringify({ message: getInstructions() + "\nUser: " + text })
             });
 
+            if (!response.ok) throw new Error("Vercel Offline");
+
             const data = await response.json();
+            const aiResponse = data.candidates[0].content.parts[0].text;
             
-            if (response.ok) {
-                let reply = data.candidates[0].content.parts[0].text;
-                reply = reply.replace(/google/gi, "Seb-Creations");
+            addMessage(aiResponse, 'ai');
+            
+            // Update Admin Stats
+            totalMessages++;
+            document.getElementById('msg-count').innerText = totalMessages;
 
-                const triggers = ["buy", "price", "cost", "hire", "service", "website", "app", "build", "create"];
-                if (triggers.some(w => text.toLowerCase().includes(w))) {
-                    reply += `<br><br><b>Interested?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
-                }
-
-                addMessage('assistant', reply);
-            } else {
-                document.body.classList.add('refueling');
-                statusLight.classList.add('busy');
-                addMessage('assistant', "⚠️ My engine is stuttering. Let me try to refuel. Please resend in a moment.");
-            }
-        } catch (err) { 
-            addMessage('assistant', "❌ Connection Error. Is the Vercel app awake?"); 
+        } catch (error) {
+            addMessage("❌ Connection Error. Is the Vercel app awake?", 'ai');
+            console.error("Error:", error);
         }
     }
 
-    function addMessage(role, text) {
+    function addMessage(text, sender) {
+        const container = document.getElementById('chat-container');
         const div = document.createElement('div');
-        div.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
+        div.className = `message ${sender}`;
         div.innerHTML = text;
-        chatContainer.appendChild(div);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
     }
-
-    sendBtn.onclick = handleChat;
-    userInput.onkeydown = (e) => { if (e.key === 'Enter') handleChat(); };
 </script>
+
 </body>
 </html>
 
