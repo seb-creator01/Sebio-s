@@ -25,7 +25,6 @@
         }
         body.refueling { background: var(--busy-gradient) !important; }
 
-        /* FIX: Ensure body doesn't bounce and fills viewport */
         body { 
             font-family: -apple-system, sans-serif; 
             background: var(--bg-gradient); 
@@ -50,7 +49,6 @@
         #status-light { width: 10px; height: 10px; background: var(--ready-green); border-radius: 50%; box-shadow: 0 0 8px var(--ready-green); transition: 0.3s; }
         #status-light.busy { background: var(--busy-orange); box-shadow: 0 0 8px var(--busy-orange); }
 
-        /* FIX: Flex-grow lets chat fill space while input stays at bottom */
         #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; -webkit-overflow-scrolling: touch; }
         .message { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 16px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; }
         .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -70,7 +68,6 @@
 
         .wa-floating { position: fixed; bottom: 100px; right: 20px; width: 55px; height: 55px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; transition: 0.3s; }
 
-        /* FIX: Sticky input area */
         #input-area { background: var(--input-bg); padding: 15px 20px; display: flex; gap: 12px; border-top: 1px solid rgba(0,0,0,0.05); align-items: center; flex-shrink: 0; }
         #input-container { flex: 1; display: flex; background: rgba(0,0,0,0.05); border-radius: 30px; padding: 5px 20px; border: 1px solid rgba(0,0,0,0.1); }
         input { flex: 1; padding: 12px 0; border: none; outline: none; font-size: 16px; background: transparent; color: var(--msg-text); width: 100%; }
@@ -117,11 +114,11 @@
 <footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
 
 <script>
-    // --- 4-TANK SPLIT KEY SYSTEM ---
-    const t1_a = "AIzaSyB"; const t1_b = "QbaMPnGcUdBEsAUxjloxg8_UcsrELc30"; // Tank 1
-    const t2_a = "AIzaSyC"; const t2_b = "u3eWHdCpqsuik4zPuN4ojw8EonLHcdk8"; // Tank 2
-    const t3_a = "AIzaSyD"; const t3_b = "dCF0Twv25Wvu-rROMcHJjAzrc8RWQHG8"; // Tank 3
-    const t4_a = "AIzaSyA"; const t4_b = "As2cE4upGnWiCXLbSlbjed7vzZtsRRXY"; // Tank 4
+    // --- 4-TANK SPLIT KEY SYSTEM (NEW KEY IN TANK 1) ---
+    const t1_a = "AIzaSyD"; const t1_b = "qsre60gwGJ7q5Yiu7MhAvN9jQDLomwgs"; // Your New Key
+    const t2_a = "AIzaSyC"; const t2_b = "u3eWHdCpqsuik4zPuN4ojw8EonLHcdk8"; 
+    const t3_a = "AIzaSyD"; const t3_b = "dCF0Twv25Wvu-rROMcHJjAzrc8RWQHG8"; 
+    const t4_a = "AIzaSyA"; const t4_b = "As2cE4upGnWiCXLbSlbjed7vzZtsRRXY"; 
 
     const API_TANKS = [t1_a+t1_b, t2_a+t2_b, t3_a+t3_b, t4_a+t4_b];
     
@@ -146,7 +143,6 @@
         const text = userInput.value.trim();
         if (!text) return;
 
-        // --- ADMIN LOGIN ---
         if (text === "seb123") {
             isAdmin = true;
             document.body.classList.add('admin-mode');
@@ -161,7 +157,7 @@
         document.body.classList.remove('refueling');
         statusLight.classList.remove('busy');
 
-        // --- ROUND ROBIN: Rotate to next tank for every message ---
+        // Automatic tank rotation
         activeTank = (activeTank + 1) % API_TANKS.length;
         tankDisplay.textContent = activeTank + 1;
 
@@ -199,8 +195,6 @@
         div.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
         div.innerHTML = text;
         chatContainer.appendChild(div);
-        
-        // Ensure scroll to bottom on new message
         setTimeout(() => {
             chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
         }, 100);
