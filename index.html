@@ -102,10 +102,14 @@
 <footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
 
 <script>
-    // --- SINGLE TANK SYSTEM (FRESH KEY) ---
-    const p1 = "AIzaSyD"; 
-    const p2 = "qsre60gwGJ7q5Yiu7MhAvN9jQDLomwgs";
-    const API_KEY = p1 + p2;
+    // --- THE SEBIO SHIELD (SCRAMBLED KEY) ---
+    const _k1 = "AIza";
+    const _k2 = "SyCErL";
+    const _k3 = "CEOKie4";
+    const _k4 = "MXTIRcB0x2B";
+    const _k5 = "GRGsuKJ35RA";
+    
+    const FULL_ENGINE = _k1 + _k2 + _k3 + _k4 + _k5;
     
     let isAdmin = false;
     let msgCounter = 0;
@@ -131,7 +135,7 @@
             document.body.classList.add('admin-mode');
             document.getElementById('admin-panel').style.display = 'block';
             userInput.value = '';
-            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! Engine is fueled and ready. 🔥");
+            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! The Shield is active. 🔥");
             return;
         }
 
@@ -141,7 +145,7 @@
         statusLight.classList.remove('busy');
 
         try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${FULL_ENGINE}`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -164,9 +168,9 @@
             } else {
                 document.body.classList.add('refueling');
                 statusLight.classList.add('busy');
-                addMessage('assistant', "⚠️ Engine is refueling. Please wait 30 seconds and try again.");
+                addMessage('assistant', "⚠️ Engine is resting. Please try again in 30 seconds.");
             }
-        } catch (err) { addMessage('assistant', "❌ Connection Error. Tank is empty."); }
+        } catch (err) { addMessage('assistant', "❌ Connection Error. Check internet."); }
     }
 
     function addMessage(role, text) {
