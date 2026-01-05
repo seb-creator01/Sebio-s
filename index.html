@@ -103,10 +103,9 @@
 
 <script>
     // --- THE SEBIO SHIELD (HUGGING FACE) ---
-    // Break your token into pieces here to keep it safe from GitHub scanners!
     const partA = "hf_";           
-    const partB = "YVeSfEhXlV"; // Put the middle part of your key here
-    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; // Put the rest of your key here
+    const partB = "YVeSfEhXlV"; // Middle part
+    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; // End part
     
     const FULL_ENGINE = partA + partB + partC;
     
@@ -120,8 +119,7 @@
     const countDisplay = document.getElementById('count');
 
     function getInstructions() {
-        // High-energy, fun personality for Sebio! 🚀
-        let role = "You are Sebio, a super cool, high-energy AI assistant created by Seb-Creations. 🚀✨ Be hype, use lots of emojis, and be extremely helpful. If someone asks to build a site, be enthusiastic! You love technology and creative ideas. Keep answers punchy and fun. 🔥";
+        let role = "You are Sebio, a super cool, high-energy AI assistant created by Seb-Creations. 🚀✨ Be hype, use lots of emojis, and be extremely helpful. If someone asks to build a site, be enthusiastic! Keep answers punchy and fun. 🔥";
         if (isAdmin) { role += " You are speaking to your creator, BOSS Seb. Treat him like the king he is! 👑"; }
         return role;
     }
@@ -130,13 +128,12 @@
         const text = userInput.value.trim();
         if (!text) return;
 
-        // Admin mode trigger (seb123)
         if (text === "seb123") {
             isAdmin = true;
             document.body.classList.add('admin-mode');
             document.getElementById('admin-panel').style.display = 'block';
             userInput.value = '';
-            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! The Shield is fully charged. Let's build something epic! 🔥🚀");
+            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! 🔥🚀");
             return;
         }
 
@@ -146,7 +143,6 @@
         statusLight.classList.add('busy');
 
         try {
-            // Updated to use Mistral 7B on Hugging Face - Fast and Fun!
             const model = "mistralai/Mistral-7B-Instruct-v0.3";
             const url = `https://api-inference.huggingface.co/models/${model}`;
             
@@ -154,14 +150,14 @@
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${FULL_ENGINE}`
+                    "Authorization": "Bearer " + FULL_ENGINE
                 },
                 body: JSON.stringify({ 
                     inputs: `<s>[INST] ${getInstructions()} \n User: ${text} [/INST]`,
                     parameters: { 
                         max_new_tokens: 300,
                         return_full_text: false,
-                        wait_for_model: true // This wakes up the AI if it's sleeping!
+                        wait_for_model: true 
                     }
                 })
             });
@@ -170,22 +166,21 @@
             
             if (response.ok) {
                 let reply = Array.isArray(data) ? data[0].generated_text : data.generated_text;
-                
-                // Keep the WhatsApp link logic intact
                 const triggers = ["buy", "price", "cost", "hire", "service", "website", "app", "build", "create"];
                 if (triggers.some(w => text.toLowerCase().includes(w))) {
                     reply += `<br><br><b>Want to build this?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
                 }
-
                 addMessage('assistant', reply);
                 msgCounter++;
                 countDisplay.textContent = msgCounter;
             } else {
-                document.body.classList.add('refueling');
-                addMessage('assistant', "⚠️ My engine is warming up! Give me 10 seconds and try again. 🚀⚡");
+                // REVEAL THE ERROR HERE
+                const errorDetail = data.error || "Model Loading...";
+                addMessage('assistant', `⚠️ Sebio says: "${errorDetail}". Try again in 10s! 🚀⚡`);
             }
         } catch (err) { 
-            addMessage('assistant', "❌ Connection Error! Check your data or signal. 📶"); 
+            // REVEAL CONNECTION ERROR HERE
+            addMessage('assistant', "❌ Connection Error: " + err.message + " 📶"); 
         } finally {
             statusLight.classList.remove('busy');
         }
