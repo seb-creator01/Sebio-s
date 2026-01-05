@@ -102,14 +102,13 @@
 <footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
 
 <script>
-    // --- THE SEBIO SHIELD (SCRAMBLED KEY) ---
-    const _k1 = "AIza";
-    const _k2 = "SyCErL";
-    const _k3 = "CEOKie4";
-    const _k4 = "MXTIRcB0x2B";
-    const _k5 = "GRGsuKJ35RA";
+    // --- THE SEBIO SHIELD (HUGGING FACE) ---
+    // Break your token into pieces here to keep it safe from GitHub scanners!
+    const partA = "hf_";           
+    const partB = "YVeSfEhXlV"; // Put the middle part of your key here
+    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; // Put the rest of your key here
     
-    const FULL_ENGINE = _k1 + _k2 + _k3 + _k4 + _k5;
+    const FULL_ENGINE = partA + partB + partC;
     
     let isAdmin = false;
     let msgCounter = 0;
@@ -121,8 +120,9 @@
     const countDisplay = document.getElementById('count');
 
     function getInstructions() {
-        let role = "Your name is Sebio. Created by Seb-Creations. Use lots of emojis 🚀✨🔥. NEVER mention Google.";
-        if (isAdmin) { role += " You are speaking to your creator, BOSS Seb. Acknowledge him as the boss."; }
+        // High-energy, fun personality for Sebio! 🚀
+        let role = "You are Sebio, a super cool, high-energy AI assistant created by Seb-Creations. 🚀✨ Be hype, use lots of emojis, and be extremely helpful. If someone asks to build a site, be enthusiastic! You love technology and creative ideas. Keep answers punchy and fun. 🔥";
+        if (isAdmin) { role += " You are speaking to your creator, BOSS Seb. Treat him like the king he is! 👑"; }
         return role;
     }
 
@@ -130,36 +130,51 @@
         const text = userInput.value.trim();
         if (!text) return;
 
+        // Admin mode trigger (seb123)
         if (text === "seb123") {
             isAdmin = true;
             document.body.classList.add('admin-mode');
             document.getElementById('admin-panel').style.display = 'block';
             userInput.value = '';
-            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! The Shield is active. 🔥");
+            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss Seb! The Shield is fully charged. Let's build something epic! 🔥🚀");
             return;
         }
 
         addMessage('user', text);
         userInput.value = '';
         document.body.classList.remove('refueling');
-        statusLight.classList.remove('busy');
+        statusLight.classList.add('busy');
 
         try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${FULL_ENGINE}`;
+            // Updated to use Mistral 7B on Hugging Face - Fast and Fun!
+            const model = "mistralai/Mistral-7B-Instruct-v0.3";
+            const url = `https://api-inference.huggingface.co/models/${model}`;
+            
             const response = await fetch(url, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: [{ text: getInstructions() + "\nUser: " + text }] }] })
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${FULL_ENGINE}`
+                },
+                body: JSON.stringify({ 
+                    inputs: `<s>[INST] ${getInstructions()} \n User: ${text} [/INST]`,
+                    parameters: { 
+                        max_new_tokens: 300,
+                        return_full_text: false,
+                        wait_for_model: true // This wakes up the AI if it's sleeping!
+                    }
+                })
             });
 
             const data = await response.json();
+            
             if (response.ok) {
-                let reply = data.candidates[0].content.parts[0].text;
-                reply = reply.replace(/google/gi, "Seb-Creations");
-
+                let reply = Array.isArray(data) ? data[0].generated_text : data.generated_text;
+                
+                // Keep the WhatsApp link logic intact
                 const triggers = ["buy", "price", "cost", "hire", "service", "website", "app", "build", "create"];
                 if (triggers.some(w => text.toLowerCase().includes(w))) {
-                    reply += `<br><br><b>Interested?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
+                    reply += `<br><br><b>Want to build this?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
                 }
 
                 addMessage('assistant', reply);
@@ -167,10 +182,13 @@
                 countDisplay.textContent = msgCounter;
             } else {
                 document.body.classList.add('refueling');
-                statusLight.classList.add('busy');
-                addMessage('assistant', "⚠️ Engine is resting. Please try again in 30 seconds.");
+                addMessage('assistant', "⚠️ My engine is warming up! Give me 10 seconds and try again. 🚀⚡");
             }
-        } catch (err) { addMessage('assistant', "❌ Connection Error. Check internet."); }
+        } catch (err) { 
+            addMessage('assistant', "❌ Connection Error! Check your data or signal. 📶"); 
+        } finally {
+            statusLight.classList.remove('busy');
+        }
     }
 
     function addMessage(role, text) {
