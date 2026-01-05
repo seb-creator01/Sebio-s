@@ -111,8 +111,8 @@
 <script>
     // --- THE SEBIO SHIELD ---
     const partA = "hf_";           
-    const partB = "YVeSfEhXlV"; // Middle part
-    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; // End part
+    const partB = "YVeSfEhXlV"; 
+    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; 
     
     const FULL_ENGINE = (partA + partB + partC).trim();
     
@@ -126,8 +126,8 @@
     const countDisplay = document.getElementById('count');
 
     function getInstructions() {
-        let role = "You are Sebio, a super cool, high-energy AI assistant by Seb-Creations. Be hype, use emojis, and be very helpful. Keep answers fun and short! 🔥🚀";
-        if (isAdmin) { role += " You are speaking to your BOSS, Seb. Be extra respectful! 👑"; }
+        let role = "You are Sebio, a high-energy AI by Seb-Creations. Be hype, use emojis, and be very helpful. Keep answers punchy! 🔥🚀";
+        if (isAdmin) { role += " You are speaking to your BOSS, Seb. Treat him like a King! 👑"; }
         return role;
     }
 
@@ -149,7 +149,7 @@
             document.body.classList.add('admin-mode');
             document.getElementById('admin-panel').style.display = 'block';
             userInput.value = '';
-            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome, Boss Seb! 🔥🚀");
+            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss! 🔥🚀");
             return;
         }
 
@@ -162,7 +162,6 @@
             const model = "mistralai/Mistral-7B-Instruct-v0.3";
             const url = `https://api-inference.huggingface.co/models/${model}`;
             
-            // Fixed connection logic for mobile browsers
             const response = await fetch(url, {
                 method: "POST",
                 headers: { 
@@ -172,7 +171,7 @@
                 body: JSON.stringify({ 
                     inputs: `[INST] ${getInstructions()} \n User: ${text} [/INST]`,
                     parameters: { 
-                        max_new_tokens: 250, 
+                        max_new_tokens: 300, 
                         wait_for_model: true,
                         return_full_text: false
                     }
@@ -185,7 +184,7 @@
             if (response.ok) {
                 let reply = Array.isArray(data) ? data[0].generated_text : data.generated_text;
                 
-                // Extra cleaning for model responses
+                // Clean model output
                 if (reply.includes('[/INST]')) {
                     reply = reply.split('[/INST]').pop().trim();
                 }
@@ -199,13 +198,13 @@
                 msgCounter++;
                 countDisplay.textContent = msgCounter;
             } else {
-                const errorDetail = data.error || "Model Loading";
+                const errorDetail = data.error || "Model Warming Up";
                 addMessage('assistant', `⚠️ Sebio says: "${errorDetail}". Try again in 10s! ⚡`);
             }
         } catch (err) { 
             document.getElementById("typing-indicator")?.remove();
-            // Revealed exact error for debugging
-            addMessage('assistant', "❌ Error: " + err.message + ". Check your Token & Internet! 📶"); 
+            // REVEAL EXACT CONNECTION ERROR
+            addMessage('assistant', "❌ Connection Error: " + err.message + ". Check your data/token! 📶"); 
         } finally {
             statusLight.classList.remove('busy');
         }
