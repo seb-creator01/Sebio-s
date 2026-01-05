@@ -114,7 +114,7 @@
     const partB = "YVeSfEhXlV"; // Middle part
     const partC = "KeUdLdmjRtsYONLVwhexsuuo"; // End part
     
-    const FULL_ENGINE = partA + partB + partC;
+    const FULL_ENGINE = (partA + partB + partC).trim();
     
     let isAdmin = false;
     let msgCounter = 0;
@@ -162,15 +162,20 @@
             const model = "mistralai/Mistral-7B-Instruct-v0.3";
             const url = `https://api-inference.huggingface.co/models/${model}`;
             
+            // Fixed connection logic for mobile browsers
             const response = await fetch(url, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + FULL_ENGINE.trim()
+                    "Authorization": "Bearer " + FULL_ENGINE
                 },
                 body: JSON.stringify({ 
                     inputs: `[INST] ${getInstructions()} \n User: ${text} [/INST]`,
-                    parameters: { max_new_tokens: 250, wait_for_model: true }
+                    parameters: { 
+                        max_new_tokens: 250, 
+                        wait_for_model: true,
+                        return_full_text: false
+                    }
                 })
             });
 
@@ -179,9 +184,12 @@
             
             if (response.ok) {
                 let reply = Array.isArray(data) ? data[0].generated_text : data.generated_text;
-                // Clean up any extra tags if the model returns them
-                reply = reply.split('[/INST]').pop().trim();
                 
+                // Extra cleaning for model responses
+                if (reply.includes('[/INST]')) {
+                    reply = reply.split('[/INST]').pop().trim();
+                }
+
                 const triggers = ["buy", "price", "cost", "hire", "service", "website", "app", "build", "create"];
                 if (triggers.some(w => text.toLowerCase().includes(w))) {
                     reply += `<br><br><b>Interested?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
@@ -191,11 +199,12 @@
                 msgCounter++;
                 countDisplay.textContent = msgCounter;
             } else {
-                const errorDetail = data.error || "Engine Warming Up";
+                const errorDetail = data.error || "Model Loading";
                 addMessage('assistant', `⚠️ Sebio says: "${errorDetail}". Try again in 10s! ⚡`);
             }
         } catch (err) { 
             document.getElementById("typing-indicator")?.remove();
+            // Revealed exact error for debugging
             addMessage('assistant', "❌ Error: " + err.message + ". Check your Token & Internet! 📶"); 
         } finally {
             statusLight.classList.remove('busy');
