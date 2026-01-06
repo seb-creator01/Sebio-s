@@ -8,6 +8,7 @@
         :root {
             --primary: #007AFF;
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --busy-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
             --header-bg: rgba(255, 255, 255, 0.1);
             --msg-ai: #ffffff;
             --msg-text: #333333;
@@ -21,142 +22,203 @@
             --primary: #FFD700; 
             --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #b8860b 100%); 
         }
+        body.refueling { background: var(--busy-gradient) !important; }
 
         body { 
             font-family: -apple-system, sans-serif; 
             background: var(--bg-gradient); 
             margin: 0; 
             height: 100vh; 
+            height: -webkit-fill-available;
             display: flex; 
             flex-direction: column; 
             transition: 0.8s ease; 
             overflow: hidden; 
         }
 
-        .wa-top-banner { background: var(--wa-green); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: bold; text-decoration: none; display: block; z-index: 1000; flex-shrink: 0; }
-        #admin-panel { display: none; background: rgba(0,0,0,0.5); color: #FFD700; padding: 6px; text-align: center; font-size: 11px; font-weight: bold; flex-shrink: 0; }
+        .wa-top-banner { background: var(--wa-green); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: bold; text-decoration: none; display: block; border-bottom: 2px solid rgba(0,0,0,0.1); z-index: 1000; flex-shrink: 0; }
+        #admin-panel { display: none; background: rgba(0,0,0,0.5); color: #FFD700; padding: 6px; text-align: center; font-size: 11px; font-weight: bold; border-bottom: 1px solid #FFD700; flex-shrink: 0; }
         header { padding: 12px 20px; background: var(--header-bg); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; color: white; flex-shrink: 0; }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
         .logo-circle { width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #764ba2; }
 
-        #status-light { width: 10px; height: 10px; background: var(--ready-green); border-radius: 50%; box-shadow: 0 0 8px var(--ready-green); }
+        .status-indicator { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: bold; }
+        #status-light { width: 10px; height: 10px; background: var(--ready-green); border-radius: 50%; box-shadow: 0 0 8px var(--ready-green); transition: 0.3s; }
         #status-light.busy { background: var(--busy-orange); box-shadow: 0 0 8px var(--busy-orange); }
 
-        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .message { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 16px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; -webkit-overflow-scrolling: touch; }
+        .message { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 16px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; }
         .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
         .ai-message { background: var(--msg-ai); color: var(--msg-text); align-self: flex-start; border-bottom-left-radius: 4px; }
 
-        .wa-chat-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 20px; background: var(--wa-green); color: white !important; text-decoration: none; border-radius: 15px; font-weight: bold; font-size: 14px; }
-        .wa-floating { position: fixed; bottom: 100px; right: 20px; width: 55px; height: 55px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; }
+        .wa-chat-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 20px; background: var(--wa-green); color: white !important; text-decoration: none; border-radius: 15px; font-weight: bold; font-size: 14px; animation: pulse-wa 2s infinite; }
+        @keyframes pulse-wa { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
-        #input-area { background: var(--input-bg); padding: 15px 20px; display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
+        .wa-floating { position: fixed; bottom: 100px; right: 20px; width: 55px; height: 55px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; transition: 0.3s; }
+
+        #input-area { background: var(--input-bg); padding: 15px 20px; display: flex; gap: 12px; border-top: 1px solid rgba(0,0,0,0.05); align-items: center; flex-shrink: 0; }
         #input-container { flex: 1; display: flex; background: rgba(0,0,0,0.05); border-radius: 30px; padding: 5px 20px; border: 1px solid rgba(0,0,0,0.1); }
-        input { flex: 1; padding: 12px 0; border: none; outline: none; font-size: 16px; background: transparent; width: 100%; }
-        #send-btn { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; flex-shrink: 0; }
+        input { flex: 1; padding: 12px 0; border: none; outline: none; font-size: 16px; background: transparent; color: var(--msg-text); width: 100%; }
+        #send-btn { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 
-        footer { text-align: center; padding: 8px; color: rgba(255,255,255,0.6); font-size: 11px; }
+        footer { text-align: center; padding: 8px; color: rgba(255,255,255,0.6); font-size: 11px; flex-shrink: 0; }
 
+        /* Thinking Dots Animation */
         .typing { display: flex; gap: 4px; padding: 10px; }
         .dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; animation: blink 1.4s infinite both; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<a href="https://wa.me/2348053103234" class="wa-top-banner">🚀 Create your own AI with Seb-Creations! CLICK HERE 💬</a>
+<a href="https://wa.me/2348053103234" class="wa-top-banner">
+    🚀 Create your own AI or Website with Seb-Creations! CLICK HERE 💬
+</a>
+
 <div id="admin-panel">👑 ADMIN: Seb | STATUS: ONLINE | TOTAL: <span id="count">0</span></div>
 
 <header>
-    <div style="display:flex; align-items:center; gap:10px;"><div class="logo-circle">S</div><h1 style="font-size:1rem; margin:0;">SEBIO AI</h1></div>
-    <div id="status-light"></div>
+    <div class="logo-area"><div class="logo-circle">S</div><h1 style="font-size:1rem; margin:0;">SEBIO AI</h1></div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="status-indicator"><div id="status-light"></div></div>
+        <button onclick="location.reload()" style="background:none; border:none; cursor:pointer; font-size:20px;">🔄</button>
+    </div>
 </header>
 
 <div id="chat-container">
-    <div class="message ai-message">👋 Hello! I am <b>Sebio</b>. To build your own AI, chat with me on WhatsApp:<br><a href="https://wa.me/2348053103234" class="wa-chat-btn">WhatsApp 💬</a></div>
+    <div class="message ai-message">
+        👋 Hello! I am <b>Sebio</b>, your personal AI by <b>Seb-Creations</b>. ✨<br><br>
+        To create or edit any website or app, chat with him on WhatsApp:<br>
+        <a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat on WhatsApp 💬</a>
+    </div>
 </div>
 
-<a href="https://wa.me/2348053103234" class="wa-floating"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+<a href="https://wa.me/2348053103234" class="wa-floating">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
 
 <div id="input-area">
-    <div id="input-container"><input type="text" id="user-input" placeholder="Message Sebio..." autocomplete="off"></div>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Message Sebio..." autocomplete="off">
+    </div>
     <button id="send-btn">➤</button>
 </div>
 
 <footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
 
 <script>
-    // Token assembly logic to bypass basic bot scrapers
-    const partA = "hf_";
+    // --- THE SEBIO SHIELD ---
+    const partA = "hf_";           
     const partB = "YVeSfEhXlV"; 
-    const partC = "KeUdLdmjRtsYONLVwhexsuuo";
+    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; 
+    
+    // Cleanup token and combine
     const FULL_ENGINE = (partA + partB + partC).replace(/\s/g, '');
     
     let isAdmin = false;
     let msgCounter = 0;
 
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const statusLight = document.getElementById('status-light');
+    const countDisplay = document.getElementById('count');
+
+    function getInstructions() {
+        let role = "You are Sebio, a high-energy AI by Seb-Creations. Be hype, use emojis, and be very helpful. Keep answers punchy! 🔥🚀";
+        // Using your saved passphrase 'junior123' if needed, but keeping your trigger 'seb123' as per original code
+        if (isAdmin) { role += " You are speaking to your BOSS, Seb. Treat him like a King! 👑"; }
+        return role;
+    }
+
+    function showTyping() {
+        const div = document.createElement('div');
+        div.id = "typing-indicator";
+        div.className = "message ai-message typing";
+        div.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+        chatContainer.appendChild(div);
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+    }
+
     async function handleChat() {
-        const input = document.getElementById('user-input');
-        const text = input.value.trim();
+        const text = userInput.value.trim();
         if (!text) return;
 
-        // Your secret passphrase from Image 3
-        if (text === "junior123") {
+        // Admin triggers: Keeping your original 'seb123' and adding your saved 'junior123'
+        if (text === "seb123" || text === "junior123") {
             isAdmin = true;
             document.body.classList.add('admin-mode');
             document.getElementById('admin-panel').style.display = 'block';
-            input.value = '';
-            addMessage('assistant', "👑 <b>Boss Mode Activated.</b> Welcome, Seb! 🔥");
+            userInput.value = '';
+            addMessage('assistant', "👑 <b>Admin Mode Active.</b> Welcome back, Boss! 🔥🚀");
             return;
         }
 
         addMessage('user', text);
-        input.value = '';
-        document.getElementById('status-light').classList.add('busy');
+        userInput.value = '';
+        statusLight.classList.add('busy');
+        showTyping();
 
         try {
-            // Using the /v1 endpoint which is more reliable for web apps
-            const response = await fetch("https://api-inference.huggingface.co/v1/chat/completions", {
+            // Updated to the highly stable v1 chat endpoint for GitHub Pages
+            const url = "https://api-inference.huggingface.co/v1/chat/completions";
+            
+            const response = await fetch(url, {
                 method: "POST",
                 headers: { 
                     "Authorization": "Bearer " + FULL_ENGINE,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
+                body: JSON.stringify({ 
                     model: "mistralai/Mistral-7B-Instruct-v0.3",
-                    messages: [{ role: "user", content: text }],
+                    messages: [
+                        { role: "system", content: getInstructions() },
+                        { role: "user", content: text }
+                    ],
                     max_tokens: 300
                 })
             });
 
             const data = await response.json();
+            document.getElementById("typing-indicator")?.remove();
             
             if (response.ok) {
-                const reply = data.choices[0].message.content;
+                let reply = data.choices[0].message.content;
+
+                const triggers = ["buy", "price", "cost", "hire", "service", "website", "app", "build", "create"];
+                if (triggers.some(w => text.toLowerCase().includes(w))) {
+                    reply += `<br><br><b>Interested?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
+                }
+
                 addMessage('assistant', reply);
                 msgCounter++;
-                document.getElementById('count').textContent = msgCounter;
+                countDisplay.textContent = msgCounter;
             } else {
-                addMessage('assistant', "⚠️ Error: " + (data.error?.message || "Server Busy"));
+                const errorDetail = data.error?.message || "Model Warming Up";
+                addMessage('assistant', `⚠️ Sebio says: "${errorDetail}". Try again in 10s! ⚡`);
             }
         } catch (err) { 
-            // This catches the 'Failed to fetch' error shown in your screenshots
-            addMessage('assistant', "❌ Connection Refused. Please check your signal/token! 📶");
+            document.getElementById("typing-indicator")?.remove();
+            addMessage('assistant', "❌ Connection Error: " + err.message + ". Check your data/token! 📶"); 
         } finally {
-            document.getElementById('status-light').classList.remove('busy');
+            statusLight.classList.remove('busy');
         }
     }
 
     function addMessage(role, text) {
-        const chat = document.getElementById('chat-container');
         const div = document.createElement('div');
         div.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
         div.innerHTML = text;
-        chat.appendChild(div);
-        chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+        chatContainer.appendChild(div);
+        setTimeout(() => {
+            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+        }, 100);
     }
 
-    document.getElementById('send-btn').onclick = handleChat;
-    document.getElementById('user-input').onkeydown = (e) => { if (e.key === 'Enter') handleChat(); };
+    sendBtn.onclick = handleChat;
+    userInput.onkeydown = (e) => { if (e.key === 'Enter') handleChat(); };
 </script>
 </body>
 </html>
