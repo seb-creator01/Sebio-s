@@ -109,12 +109,6 @@
 <footer>&copy; 2025 <strong>Seb-Creations</strong></footer>
 
 <script>
-    // --- THE SEBIO SHIELD ---
-    const partA = "hf_";           
-    const partB = "YVeSfEhXlV"; 
-    const partC = "KeUdLdmjRtsYONLVwhexsuuo"; 
-    const FULL_ENGINE = (partA + partB + partC).replace(/\s/g, '');
-    
     let isAdmin = false;
     let msgCounter = 0;
 
@@ -158,51 +152,54 @@
         showTyping();
 
         try {
-            const url = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3";
-
+            // ✅ Hugging Face Space no-token endpoint
+            const url = "https://hf.space/embed/mistralai/Mistral-7B-Instruct-v0.3/api/predict/";
+            
             const response = await fetch(url, {
                 method: "POST",
-                headers: { 
-                    "Authorization": "Bearer " + FULL_ENGINE,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    inputs: `You are Sebio AI.\nUser: ${text}\nSebio:`,
-                    parameters: { max_new_tokens: 300 }
-                })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ data: [text] })
             });
 
             const data = await response.json();
             document.getElementById("typing-indicator")?.remove();
 
-            let reply = data?.[0]?.generated_text || "⚠️ Sebio is thinking... Try again!";
+            if (data && data.data && data.data[0]) {
+                let reply = data.data[0];
 
-            const triggers = ["buy","price","cost","hire","service","website","app","build","create"];
-            if(triggers.some(w => text.toLowerCase().includes(w))) {
-                reply += `<br><br><b>Interested?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
+                const triggers = ["buy", "price", "cost", "hire", "service", "website", "app", "build", "create"];
+                if (triggers.some(w => text.toLowerCase().includes(w))) {
+                    reply += `<br><br><b>Interested?</b><br><a href="https://wa.me/2348053103234" class="wa-chat-btn">Chat with Seb-Creations 💬</a>`;
+                }
+
+                addMessage('assistant', reply);
+                msgCounter++;
+                countDisplay.textContent = msgCounter;
+            } else {
+                addMessage('assistant', `⚠️ Sebio says: "No response from AI. Try again!" ⚡`);
             }
 
-            addMessage('assistant', reply);
-            msgCounter++;
-            countDisplay.textContent = msgCounter;
-        } catch(err) {
+        } catch (err) {
             document.getElementById("typing-indicator")?.remove();
-            addMessage('assistant', "❌ Connection Error: " + err.message + ". Check your token! 📶");
+            addMessage('assistant', "❌ Connection Error: " + err.message + ". 📶");
         } finally {
             statusLight.classList.remove('busy');
         }
     }
 
-    function addMessage(role,text) {
+    function addMessage(role, text) {
         const div = document.createElement('div');
-        div.className = `message ${role==='user'?'user-message':'ai-message'}`;
+        div.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
         div.innerHTML = text;
         chatContainer.appendChild(div);
-        setTimeout(()=>{chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:'smooth'});},100);
+        setTimeout(() => {
+            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+        }, 100);
     }
 
     sendBtn.onclick = handleChat;
-    userInput.onkeydown = e => { if(e.key==='Enter') handleChat(); };
+    userInput.onkeydown = (e) => { if (e.key === 'Enter') handleChat(); };
 </script>
+
 </body>
 </html>
